@@ -26,6 +26,8 @@ def start_bot():
 
 
 def to_timestamp(date_time):
+    if date_time is None:
+        return None
     return int(datetime.datetime.strptime(date_time.split("+")[0], "%Y-%m-%dT%H:%M:%S").timestamp())
 
 
@@ -41,8 +43,11 @@ def get_tasks(discord_user):
                 task_string += f"__{stack}__\n"
                 for task in work_stacks[stack]:
                     if user["uid"] in task["assignedUsers"]:
-                        duedate = to_timestamp(task["duedate"])
-                        task_string += f" - [**{task["title"]}**](<{nextcloud_access.NEXTCLOUD_USER_URL}\\card\\{task["id"]}>) due <t:{duedate}> <t:{duedate}:R>\n"
+                        due_date = to_timestamp(task.get("duedate"))
+                        due_date_string = f"due <t:{due_date}> <t:{due_date}:R>"
+                        if due_date is None:
+                            due_date_string = ""
+                        task_string += f" - [**{task["title"]}**](<{nextcloud_access.NEXTCLOUD_USER_URL}\\card\\{task["id"]}>) {due_date_string}\n"
                 task_string += "\n"
 
     return mention_string + task_string

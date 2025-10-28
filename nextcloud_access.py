@@ -34,6 +34,8 @@ def fetch_work_stack():
         # "Done": []
     }
 
+    #pprint(stacks)
+
     for s in stacks:
         title = s["title"]
         if title in work_stacks:
@@ -42,7 +44,7 @@ def fetch_work_stack():
                     "title": c["title"],
                     "id": c["id"],
                     "assignedUsers": [],
-                    "duedate": c["duedate"]
+                    "duedate": c.get("duedate")
                 }
 
                 for u in c["assignedUsers"]:
@@ -51,3 +53,5 @@ def fetch_work_stack():
                 work_stacks[title].append(card)
 
     return work_stacks
+
+#fetch_work_stack()
